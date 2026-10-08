@@ -3,15 +3,19 @@ version: "3"
 
 tasks:
   add:
-    desc: Add this marketplace to Claude
+    desc: Add this marketplace to Claude and Copilot
     cmds:
       - task: add:claude
+      - task: add:copilot
 
   add:repo:
     desc: Add this marketplace using the remote repository
     cmds:
       - echo ">> Adding marketplace to Claude..."
       - claude plugin marketplace add {{ .MARKETPLACE_REPO }}
+      - echo ">> Adding marketplace to Copilot..."
+      - cmd: copilot plugin marketplace add {{ .MARKETPLACE_REPO }}
+        ignore_error: true
 
   add:claude:
     desc: Add this marketplace to Claude
@@ -23,10 +27,22 @@ tasks:
       - echo ">> Adding marketplace to Claude..."
       - claude plugin marketplace add ./
 
+  add:copilot:
+    desc: Add this marketplace to Copilot
+    internal: true
+    preconditions:
+      - sh: command -v copilot
+        msg: "Copilot is not installed. Please install Copilot to add this marketplace."
+    cmds:
+      - echo ">> Adding marketplace to Copilot..."
+      - cmd: copilot plugin marketplace add ./
+        ignore_error: true
+
   remove:
-    desc: Remove this marketplace from Claude
+    desc: Remove this marketplace from Claude and Copilot
     cmds:
       - task: remove:claude
+      - task: remove:copilot
 
   remove:claude:
     desc: Remove this marketplace from Claude
@@ -39,13 +55,25 @@ tasks:
       - cmd: claude plugin marketplace remove {{ .MARKETPLACE_NAME }}
         ignore_error: true
 
+  remove:copilot:
+    desc: Remove this marketplace from Copilot
+    internal: true
+    preconditions:
+      - sh: command -v copilot
+        msg: "Copilot is not installed. Please install Copilot to remove this marketplace."
+    cmds:
+      - echo ">> Removing marketplace from Copilot..."
+      - cmd: copilot plugin marketplace remove {{ .MARKETPLACE_NAME }} --force
+        ignore_error: true
+
   reset:
-    desc: Reset this marketplace in Claude
+    desc: Reset this marketplace in Claude and Copilot
     cmds:
       - task: remove
       - task: add
 
   update:
-    desc: Update this marketplace in Claude
+    desc: Update this marketplace in Claude and Copilot
     cmds:
       - claude plugin marketplace update {{ .MARKETPLACE_NAME }}
+      - copilot plugin marketplace update {{ .MARKETPLACE_NAME }}

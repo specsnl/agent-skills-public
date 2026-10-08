@@ -3,8 +3,9 @@ version: "3"
 
 tasks:
   install:*:
-    desc: Install a plugin in Claude
+    desc: Install a plugin in Claude and Copilot
     vars:
       PLUGIN: '{{ index .MATCH 0 }}'
     cmds:
       - claude plugin install {{ .PLUGIN }}@{{ .MARKETPLACE_NAME }}
+      - copilot plugin install {{ .PLUGIN }}@{{ .MARKETPLACE_NAME }}
