@@ -2,6 +2,17 @@
 
 This repo is a Claude Code plugin marketplace. Each plugin under `plugins/<name>/`
 bundles some combination of skills, commands, MCP servers, hooks, and agents.
+The same marketplace is also served to GitHub Copilot CLI:
+`.github/plugin/marketplace.json` is a symlink to `.claude-plugin/marketplace.json`,
+so only ever edit the latter.
+
+## Document both Claude and Copilot usage
+
+Every plugin's `README.md` must show how to use it from both Claude and Copilot.
+List the install command for each (`claude plugin install <plugin>@specs-public`
+and `copilot plugin install <plugin>@specs-public`), and for every user-invocable
+skill or command list both invocations: Claude uses `/<skill>` while Copilot uses
+the plugin-namespaced `/<plugin>:<skill>`.
 
 ## Keep plugin READMEs in sync
 

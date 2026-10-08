@@ -1,0 +1,103 @@
+# https://taskfile.dev
+version: "3"
+
+tasks:
+  add:
+    desc: Add this marketplace to Claude and Copilot
+    cmds:
+      - task: :cli:check
+      - task: add:claude
+      - task: add:copilot
+
+  add:repo:
+    desc: Add this marketplace using the remote repository
+    cmds:
+      - task: :cli:check
+      - task: add:repo:claude
+      - task: add:repo:copilot
+
+  add:claude:
+    desc: Add this marketplace to Claude
+    internal: true
+    if: command -v claude
+    cmds:
+      - echo ">> Adding marketplace to Claude..."
+      - claude plugin marketplace add ./
+
+  add:copilot:
+    desc: Add this marketplace to Copilot
+    internal: true
+    if: command -v copilot
+    cmds:
+      - echo ">> Adding marketplace to Copilot..."
+      - cmd: copilot plugin marketplace add ./
+        ignore_error: true
+
+  add:repo:claude:
+    desc: Add this marketplace to Claude using the remote repository
+    internal: true
+    if: command -v claude
+    cmds:
+      - echo ">> Adding marketplace to Claude..."
+      - claude plugin marketplace add {{ .MARKETPLACE_REPO }}
+
+  add:repo:copilot:
+    desc: Add this marketplace to Copilot using the remote repository
+    internal: true
+    if: command -v copilot
+    cmds:
+      - echo ">> Adding marketplace to Copilot..."
+      - cmd: copilot plugin marketplace add {{ .MARKETPLACE_REPO }}
+        ignore_error: true
+
+  remove:
+    desc: Remove this marketplace from Claude and Copilot
+    cmds:
+      - task: :cli:check
+      - task: remove:claude
+      - task: remove:copilot
+
+  remove:claude:
+    desc: Remove this marketplace from Claude
+    internal: true
+    if: command -v claude
+    cmds:
+      - echo ">> Removing marketplace from Claude..."
+      - cmd: claude plugin marketplace remove {{ .MARKETPLACE_NAME }}
+        ignore_error: true
+
+  remove:copilot:
+    desc: Remove this marketplace from Copilot
+    internal: true
+    if: command -v copilot
+    cmds:
+      - echo ">> Removing marketplace from Copilot..."
+      - cmd: copilot plugin marketplace remove {{ .MARKETPLACE_NAME }} --force
+        ignore_error: true
+
+  reset:
+    desc: Reset this marketplace in Claude and Copilot
+    cmds:
+      - task: remove
+      - task: add
+
+  update:
+    desc: Update this marketplace in Claude and Copilot
+    cmds:
+      - task: :cli:check
+      - task: update:claude
+      - task: update:copilot
+
+  update:claude:
+    desc: Update this marketplace in Claude
+    internal: true
+    if: command -v claude
+    cmds:
+      - claude plugin marketplace update {{ .MARKETPLACE_NAME }}
+
+  update:copilot:
+    desc: Update this marketplace in Copilot
+    internal: true
+    if: command -v copilot
+    cmds:
+      - copilot plugin marketplace update {{ .MARKETPLACE_NAME }}

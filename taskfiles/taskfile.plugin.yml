@@ -1,0 +1,28 @@
+# https://taskfile.dev
+version: "3"
+
+tasks:
+  install:*:
+    desc: Install a plugin in Claude and Copilot
+    vars:
+      PLUGIN: '{{ index .MATCH 0 }}'
+    cmds:
+      - task: :cli:check
+      - task: claude:install
+        vars: { PLUGIN: '{{ .PLUGIN }}' }
+      - task: copilot:install
+        vars: { PLUGIN: '{{ .PLUGIN }}' }
+
+  claude:install:
+    desc: Install a plugin in Claude
+    internal: true
+    if: command -v claude
+    cmds:
+      - claude plugin install {{ .PLUGIN }}@{{ .MARKETPLACE_NAME }}
+
+  copilot:install:
+    desc: Install a plugin in Copilot
+    internal: true
+    if: command -v copilot
+    cmds:
+      - copilot plugin install {{ .PLUGIN }}@{{ .MARKETPLACE_NAME }}

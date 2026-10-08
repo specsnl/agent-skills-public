@@ -1,0 +1,16 @@
+# https://taskfile.dev
+version: "3"
+
+tasks:
+  check:
+    desc: Report missing CLIs and fail when none of them is installed
+    internal: true
+    run: once
+    preconditions:
+      - sh: command -v claude || command -v copilot
+        msg: "Neither Claude nor Copilot is installed. Please install at least one of them."
+    cmds:
+      - cmd: echo ">> Claude is not installed, skipping Claude..."
+        if: '! command -v claude'
+      - cmd: echo ">> Copilot is not installed, skipping Copilot..."
+        if: '! command -v copilot'
