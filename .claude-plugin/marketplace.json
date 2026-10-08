@@ -1,0 +1,11 @@
+{
+    "name": "specs-public",
+    "owner": {
+        "name": "Specsnl Team",
+        "email": "info@specs.nl"
+    },
+    "metadata": {
+        "description": "Specs agent-skills meant for the public sector (govnl)."
+    },
+    "plugins": []
+}
