@@ -12,3 +12,6 @@ includes:
   plugin: ./taskfiles/taskfile.plugin.yml
   md: ./taskfiles/taskfile.md.yml
   hooks: ./taskfiles/taskfile.hooks.yml
+  cli:
+    taskfile: ./taskfiles/taskfile.cli.yml
+    internal: true
