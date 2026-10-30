@@ -1,12 +1,12 @@
-# Releases plugin
+# GitHub release docs plugin
 
 Skills for writing Dutch release notes and changelogs for releases, based on the GitHub issues and
 pull requests in a release.
 
 ## Installation
 
-Claude: `claude plugin install releases@specs-public`
-Copilot: `copilot plugin install releases@specs-public`
+Claude: `claude plugin install gh-release-docs@specs-public`
+Copilot: `copilot plugin install gh-release-docs@specs-public`
 
 ## Requirements
 
@@ -29,7 +29,7 @@ propose areas based on the issues and ask you to confirm them.
 
 **releasenotes**:
 Claude: `/releasenotes RELEASE_TAG`
-Copilot: `/releases:releasenotes RELEASE_TAG`
+Copilot: `/gh-release-docs:releasenotes RELEASE_TAG`
 
 Adds the release notes for `RELEASE_TAG` to `releasenotes.md` in the project root, above the previous
 release. Items whose user impact is unclear, or that are not (fully) released, are not added; they
@@ -38,7 +38,7 @@ are listed in the chat under **Verduidelijking nodig**. The writing rules are in
 
 **changelog**:
 Claude: `/changelog RELEASE_TAG`
-Copilot: `/releases:changelog RELEASE_TAG`
+Copilot: `/gh-release-docs:changelog RELEASE_TAG`
 
 Adds the changelog for `RELEASE_TAG` to `changelog.md` in the project root, grouped by product area,
 Backend and Fixes. Unclear or not (fully) released items are listed in the chat under

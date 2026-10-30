@@ -1,5 +1,5 @@
 {
-    "name": "releases",
+    "name": "gh-release-docs",
     "description": "A Specs plugin for writing Dutch release notes and changelogs from GitHub releases",
     "author": {
         "name": "Specsnl Team",
