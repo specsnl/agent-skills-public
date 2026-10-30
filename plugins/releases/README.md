@@ -5,7 +5,7 @@ pull requests in a release.
 
 ## Installation
 
-Claude: `claude plugin install releases@specs-public`  
+Claude: `claude plugin install releases@specs-public`
 Copilot: `copilot plugin install releases@specs-public`
 
 ## Requirements
@@ -27,26 +27,26 @@ propose areas based on the issues and ask you to confirm them.
 
 ## Skills
 
-**releasenotes**:  
-Claude: `/releasenotes v3.8.0`  
-Copilot: `/releases:releasenotes v3.8.0`
+**releasenotes**:
+Claude: `/releasenotes RELEASE_TAG`
+Copilot: `/releases:releasenotes RELEASE_TAG`
 
-Adds the release notes for `v3.8.0` to `releasenotes.md` in the project root, above the previous
+Adds the release notes for `RELEASE_TAG` to `releasenotes.md` in the project root, above the previous
 release. Items whose user impact is unclear, or that are not (fully) released, are not added; they
 are listed in the chat under **Verduidelijking nodig**. The writing rules are in
 `skills/releasenotes/release-notes-instructions.md`.
 
-**changelog**:  
-Claude: `/changelog v3.8.0`  
-Copilot: `/releases:changelog v3.8.0`
+**changelog**:
+Claude: `/changelog RELEASE_TAG`
+Copilot: `/releases:changelog RELEASE_TAG`
 
-Adds the changelog for `v3.8.0` to `changelog.md` in the project root, grouped by product area,
+Adds the changelog for `RELEASE_TAG` to `changelog.md` in the project root, grouped by product area,
 Backend and Fixes. Unclear or not (fully) released items are listed in the chat under
 **Needs clarification**. The writing rules are in `skills/changelog/changelog-instructions.md`.
 
 ## Scripts
 
-**get-release-issues.sh**:  
+**get-release-issues.sh**:
 Used by both skills. Picks up pull requests in the release's "What's Changed" list that:
 
 - are titled `type(ISSUE_NUMBER): ...`, for example `feat(7807): ...`. For each issue it writes the
@@ -56,7 +56,7 @@ Used by both skills. Picks up pull requests in the release's "What's Changed" li
 
 The result is written to `RELEASE_TAG-issues.md` in the current directory.
 
-**get-issues.sh**:  
+**get-issues.sh**:
 Fetches the issues mentioned in a single issue (or a Task issue itself), with their comments and
 linked pull requests. Not used by the skills.
 
