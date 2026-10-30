@@ -9,8 +9,8 @@
     },
     "plugins": [
         {
-            "name": "releases",
-            "source": "./plugins/releases",
+            "name": "gh-release-docs",
+            "source": "./plugins/gh-release-docs",
             "version": "0.0.1",
             "description": "A Specs plugin for writing Dutch release notes and changelogs from GitHub releases"
         }

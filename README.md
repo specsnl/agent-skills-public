@@ -15,9 +15,9 @@ plugins using:
 
 ## Plugins
 
-| Plugin Name           | Description                                                                        |
-|-----------------------|------------------------------------------------------------------------------------|
-| releases@specs-public | A Specs plugin for writing Dutch release notes and changelogs from GitHub releases |
+| Plugin Name                  | Description                                                                        |
+|------------------------------|------------------------------------------------------------------------------------|
+| gh-release-docs@specs-public | A Specs plugin for writing Dutch release notes and changelogs from GitHub releases |
 
 ## Tasks
 
