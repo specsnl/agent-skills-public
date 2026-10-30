@@ -7,5 +7,12 @@
     "metadata": {
         "description": "Specs agent-skills meant for the public sector (govnl)."
     },
-    "plugins": []
+    "plugins": [
+        {
+            "name": "releases",
+            "source": "./plugins/releases",
+            "version": "0.0.1",
+            "description": "A Specs plugin for writing Dutch release notes and changelogs from GitHub releases"
+        }
+    ]
 }

@@ -1,0 +1,12 @@
+{
+    "name": "releases",
+    "description": "A Specs plugin for writing Dutch release notes and changelogs from GitHub releases",
+    "author": {
+        "name": "Specsnl Team",
+        "email": "info@specs.nl",
+        "url": "https://github.com/specsnl"
+    },
+    "repository": "specsnl/agent-skills-public",
+    "license": "MIT",
+    "keywords": ["releases", "changelog", "release-notes", "github", "specs", "plugin"]
+}
