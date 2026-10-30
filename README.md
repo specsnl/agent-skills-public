@@ -15,9 +15,9 @@ plugins using:
 
 ## Plugins
 
-| Plugin Name        | Description |
-|--------------------|-------------|
-| **No plugins yet** | -           |
+| Plugin Name           | Description                                                                        |
+|-----------------------|------------------------------------------------------------------------------------|
+| releases@specs-public | A Specs plugin for writing Dutch release notes and changelogs from GitHub releases |
 
 ## Tasks
 
