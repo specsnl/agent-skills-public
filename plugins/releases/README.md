@@ -18,7 +18,7 @@ Copilot: `copilot plugin install releases@specs-public`
    it refers to into one Markdown file (`RELEASE_TAG-issues.md`).
 2. A skill reads that file and writes the release notes or changelog in Dutch.
 
-Run the skills from within the project you are writing release notes for. The GitHub repository of
+Run the skills from **within the project** you are writing release notes for. The GitHub repository of
 that directory is used, and the output is written there.
 
 Items are grouped by product area. The skills use the areas from earlier releases in
