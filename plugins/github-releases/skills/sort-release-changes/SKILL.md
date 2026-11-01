@@ -1,0 +1,59 @@
+---
+name: sort-release-changes
+description: Sort the changes of a GitHub release into a grouped "What's Changed" list (Features, Bug fixes, Other, Maintenance, Dependencies) and a list of the released issues per group, for the release description and the release ticket. Use when asked to sort, group or organise a release's changes or to list the issues of a release, e.g. "/sort-release-changes v3.8.0", "sort this release", "geef me de issues van deze release", or when a `/releases/tag/<tag>` URL is pasted.
+argument-hint: RELEASE_TAG [--ticket-repo OWNER/REPO] [--issue-repo OWNER/REPO] [-R OWNER/REPO] [--previous-tag TAG]
+---
+
+# Sort release changes
+
+Print the grouped "What's Changed" list and the issue list of release `$ARGUMENTS`, both rendered by the
+[`gh-release-changes`](https://github.com/specsnl/gh-release-changes) CLI.
+
+## 1. Find the CLI
+
+Run `gh release-changes version`. If that fails, run `gh-release-changes version` (the Homebrew binary). Use the
+first one that works as `<cli>` below. If neither works, stop and tell the user to install it:
+
+```sh
+gh extension install specsnl/gh-release-changes
+# or, with Homebrew:
+brew install specsnl/tap/gh-release-changes
+```
+
+## 2. Work out the arguments
+
+- **Tag** (required): always pass it explicitly; without a tag the CLI wants an interactive terminal and fails.
+  If `$ARGUMENTS` holds a release URL (`https://<host>/<owner>/<repo>/releases/tag/<tag>`), use its tag and pass
+  `-R <owner>/<repo>` (`-R <host>/<owner>/<repo>` when the host is not `github.com`). If no tag is given, ask
+  for it; `gh release list --limit 5` shows the latest releases to suggest.
+- **Repository**: the GitHub repository of the current directory, unless `-R` is given.
+- **`--ticket-repo OWNER/REPO`**: pass it when the release ticket lives in another repository than the one
+  released, so the issues are written as `OWNER/REPO#N` and link correctly from the ticket. If the user names
+  the ticket's repository or links the ticket, derive it from that.
+- **`--issue-repo OWNER/REPO`**: pass it when the issue numbers in the PR titles point at another repository.
+- **`--previous-tag TAG`**: pass it only when the user asks to compare with a specific tag.
+
+## 3. Run
+
+```sh
+<cli> [-R OWNER/REPO] [--previous-tag TAG] sort <tag>
+<cli> [-R OWNER/REPO] [--previous-tag TAG] issues <tag> [--issue-repo OWNER/REPO] [--ticket-repo OWNER/REPO]
+```
+
+`--issue-repo` and `--ticket-repo` belong to `issues` only. Stdout is the product; stderr carries warnings and
+errors. If a command exits `1`, relay its `error: …` line. The common causes are an unknown tag
+(`tag_not_found`), and a missing **Contents: write** permission on the repository (`forbidden`), which GitHub's
+generate-notes API requires even though it creates nothing; authentication is `gh`'s own (`gh auth login`).
+
+## 4. Show the result
+
+Show the two outputs in separate fenced `markdown` code blocks, so each can be copied on its own:
+
+1. The output of `sort`, for the release description.
+2. The output of `issues`, for the release ticket.
+
+Put a one-line intro before each block. Show both outputs exactly as printed: do not edit, reorder, translate
+or add anything inside the blocks. If an output contains a run of three or more backticks, use a longer fence.
+
+After the blocks, mention any `warning:` lines from stderr, such as pull requests whose title is outside the
+`<type>[(<scopes>)][!]: <subject>` format; they are listed under **Unclassified**.
