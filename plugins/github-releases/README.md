@@ -23,7 +23,9 @@ Copilot: `copilot plugin install github-releases@specs-public`
   ```
 
   Or with Homebrew, as a standalone `gh-release-changes` binary: `brew install specsnl/tap/gh-release-changes`.
-  The skills accept either and print these install instructions when neither is found.
+  To try a release candidate, install `specsnl/tap/gh-release-changes@rc` instead. The skills accept either and
+  prefer the Homebrew binary when both are installed, so a release candidate takes precedence over the stable gh
+  extension. They print these install instructions when neither is found.
 - **Contents: write** permission on the repository: GitHub's generate-notes API requires it, even though nothing
   is created.
 
