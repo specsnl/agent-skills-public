@@ -11,8 +11,9 @@ Print the grouped "What's Changed" list and the issue list of release `$ARGUMENT
 
 ## 1. Find the CLI
 
-Run `gh release-changes version`. If that fails, run `gh-release-changes version` (the Homebrew binary). Use the
-first one that works as `<cli>` below. If neither works, stop and tell the user to install it:
+Run `gh-release-changes version` (the Homebrew binary) first, so a release candidate installed from
+`specsnl/tap/gh-release-changes@rc` wins. If that fails, run `gh release-changes version` (the gh extension). Use
+the first one that works as `<cli>` below. If neither works, stop and tell the user to install it:
 
 ```sh
 gh extension install specsnl/gh-release-changes
