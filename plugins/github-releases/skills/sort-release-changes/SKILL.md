@@ -1,7 +1,7 @@
 ---
 name: sort-release-changes
 description: Sort the changes of a GitHub release into a grouped "What's Changed" list (Features, Bug fixes, Other, Maintenance, Dependencies) and a list of the released issues per group, for the release description and the release ticket. Use when asked to sort, group or organise a release's changes or to list the issues of a release, e.g. "/sort-release-changes v3.8.0", "sort this release", "geef me de issues van deze release", or when a `/releases/tag/<tag>` URL is pasted.
-argument-hint: RELEASE_TAG [--ticket-repo OWNER/REPO] [--issue-repo OWNER/REPO] [-R OWNER/REPO] [--previous-tag TAG]
+argument-hint: RELEASE_TAG [--relative-to OWNER/REPO] [--scope-issue-repo OWNER/REPO] [-R OWNER/REPO] [--previous-tag TAG]
 disable-model-invocation: true
 ---
 
@@ -29,20 +29,20 @@ brew install specsnl/tap/gh-release-changes
   `-R <owner>/<repo>` (`-R <host>/<owner>/<repo>` when the host is not `github.com`). If no tag is given, ask
   for it; `gh release list --limit 5` shows the latest releases to suggest.
 - **Repository**: the GitHub repository of the current directory, unless `-R` is given.
-- **`--ticket-repo OWNER/REPO`**: pass it when the release ticket lives in another repository than the one
+- **`--relative-to OWNER/REPO`**: pass it when the release ticket lives in another repository than the one
   released, so the issues are written as `OWNER/REPO#N` and link correctly from the ticket. If the user names
   the ticket's repository or links the ticket, derive it from that.
-- **`--issue-repo OWNER/REPO`**: pass it when the issue numbers in the PR titles point at another repository.
+- **`--scope-issue-repo OWNER/REPO`**: pass it when the issue numbers in the PR titles point at another repository.
 - **`--previous-tag TAG`**: pass it only when the user asks to compare with a specific tag.
 
 ## 3. Run
 
 ```sh
 <cli> [-R OWNER/REPO] [--previous-tag TAG] sort <tag>
-<cli> [-R OWNER/REPO] [--previous-tag TAG] issues <tag> [--issue-repo OWNER/REPO] [--ticket-repo OWNER/REPO]
+<cli> [-R OWNER/REPO] [--previous-tag TAG] issues <tag> [--scope-issue-repo OWNER/REPO] [--relative-to OWNER/REPO]
 ```
 
-`--issue-repo` and `--ticket-repo` belong to `issues` only. Stdout is the product; stderr carries warnings and
+`--scope-issue-repo` and `--relative-to` belong to `issues` only. Stdout is the product; stderr carries warnings and
 errors. If a command exits `1`, relay its `error: …` line. The common causes are an unknown tag
 (`tag_not_found`), and a missing **Contents: write** permission on the repository (`forbidden`), which GitHub's
 generate-notes API requires even though it creates nothing; authentication is `gh`'s own (`gh auth login`).

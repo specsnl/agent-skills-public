@@ -1,7 +1,7 @@
 ---
 name: write-release-notes
 description: Write Dutch release notes for end users and stakeholders from the issues and pull requests of a GitHub release. Use when asked to write release notes for a release tag, e.g. "/write-release-notes v3.8.0" or "schrijf de release notes voor v3.8.0".
-argument-hint: RELEASE_TAG [--issue-repo OWNER/REPO] [-R OWNER/REPO] [--previous-tag TAG]
+argument-hint: RELEASE_TAG [--scope-issue-repo OWNER/REPO] [-R OWNER/REPO] [--previous-tag TAG]
 disable-model-invocation: true
 ---
 
@@ -29,7 +29,7 @@ brew install specsnl/tap/gh-release-changes
   `-R <owner>/<repo>` (`-R <host>/<owner>/<repo>` when the host is not `github.com`). If no tag is given, ask
   for it; `gh release list --limit 5` shows the latest releases to suggest.
 - **Repository**: the GitHub repository of the current directory, unless `-R` is given.
-- **`--issue-repo OWNER/REPO`**: pass it when the issue numbers in the PR titles point at another repository.
+- **`--scope-issue-repo OWNER/REPO`**: pass it when the issue numbers in the PR titles point at another repository.
 - **`--previous-tag TAG`**: pass it only when the user asks to compare with a specific tag.
 
 ## 3. Fetch the dump
@@ -39,7 +39,7 @@ usernames and internal discussion):
 
 ```sh
 dump="$(mktemp -t release-dump.XXXXXX)"
-<cli> [-R OWNER/REPO] [--previous-tag TAG] dump <tag> [--issue-repo OWNER/REPO] > "$dump"
+<cli> [-R OWNER/REPO] [--previous-tag TAG] dump <tag> [--scope-issue-repo OWNER/REPO] > "$dump"
 ```
 
 - Exit `0`: everything was read.
