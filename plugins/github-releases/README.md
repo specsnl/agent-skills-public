@@ -16,7 +16,7 @@ Copilot: `copilot plugin install github-releases@specs-public`
 ## Requirements
 
 - [GitHub CLI](https://cli.github.com/) (`gh`), logged in (`gh auth login`, or `GH_TOKEN`).
-- The `gh-release-changes` CLI, as a gh extension:
+- The `gh-release-changes` CLI, v0.3.0 or later, as a gh extension:
 
   ```sh
   gh extension install specsnl/gh-release-changes
@@ -65,6 +65,10 @@ and ask you to confirm them. The issue dump is written to a temporary file outsi
 afterwards, so the usernames and internal discussion in it never end up in the repository. Pass
 `--scope-issue-repo OWNER/REPO` when the issue numbers in the PR titles point at another repository.
 
+All skills also take `--since-final`, to compare a release candidate with the previous final release so it covers
+the whole release cycle (it excludes `--previous-tag`), and `--link closing`, to also take the issues a pull
+request closes on GitHub rather than only the issue numbers in its title.
+
 ### sort-release-changes
 
 Claude: `/sort-release-changes RELEASE_TAG [--relative-to OWNER/REPO]`  
@@ -78,4 +82,8 @@ blocks:
 2. The issues per group, for the release ticket.
 
 Pass `--relative-to OWNER/REPO` when the release ticket lives in another repository, so the issues are written as
-`OWNER/REPO#N`.
+`OWNER/REPO#N`. The issue list takes three more options:
+
+- `--unlinked`: also list the pull requests without an issue (Dependabot bumps excepted).
+- `--tasks`: write every line as a task (`- [ ] #N`), for a release ticket QA ticks the issues off in.
+- `--titles`: follow every issue with its title, for places that do not expand references, such as Zammad or mail.
