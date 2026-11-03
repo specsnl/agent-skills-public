@@ -2,6 +2,7 @@
 name: write-changelog
 description: Write a concise Dutch changelog, grouped by product area, from the issues and pull requests of a GitHub release. Use when asked to write a changelog for a release tag, e.g. "/write-changelog v3.8.0" or "maak de changelog voor v3.8.0".
 argument-hint: RELEASE_TAG [--issue-repo OWNER/REPO] [-R OWNER/REPO] [--previous-tag TAG]
+disable-model-invocation: true
 ---
 
 # Write changelog
