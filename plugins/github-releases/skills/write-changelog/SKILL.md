@@ -1,7 +1,7 @@
 ---
 name: write-changelog
 description: Write a concise Dutch changelog, grouped by product area, from the issues and pull requests of a GitHub release. Use when asked to write a changelog for a release tag, e.g. "/write-changelog v3.8.0" or "maak de changelog voor v3.8.0".
-argument-hint: RELEASE_TAG [--issue-repo OWNER/REPO] [-R OWNER/REPO] [--previous-tag TAG]
+argument-hint: RELEASE_TAG [--scope-issue-repo OWNER/REPO] [-R OWNER/REPO] [--previous-tag TAG | --since-final] [--link closing]
 disable-model-invocation: true
 ---
 
@@ -29,8 +29,15 @@ brew install specsnl/tap/gh-release-changes
   `-R <owner>/<repo>` (`-R <host>/<owner>/<repo>` when the host is not `github.com`). If no tag is given, ask
   for it; `gh release list --limit 5` shows the latest releases to suggest.
 - **Repository**: the GitHub repository of the current directory, unless `-R` is given.
-- **`--issue-repo OWNER/REPO`**: pass it when the issue numbers in the PR titles point at another repository.
+- **`--scope-issue-repo OWNER/REPO`**: pass it when the issue numbers in the PR titles point at another repository.
 - **`--previous-tag TAG`**: pass it only when the user asks to compare with a specific tag.
+- **`--since-final`**: compare with the newest final release older than the tag instead of GitHub's choice, so
+  a later release candidate (`v3.8.0-rc.3`) covers the whole release cycle rather than only what changed since
+  the previous candidate. Pass it when the user asks for it or for the whole release. It excludes
+  `--previous-tag`: never pass both.
+- **`--link closing`**: also take the issues a pull request closes on GitHub (a closing keyword such as
+  `Closes #13`, or a link in its Development sidebar), not only the digit scopes of its title. Pass it when the
+  user asks for it, or when the pull requests reference their issues in the description rather than the title.
 
 ## 3. Fetch the dump
 
@@ -39,14 +46,14 @@ usernames and internal discussion):
 
 ```sh
 dump="$(mktemp -t release-dump.XXXXXX)"
-<cli> [-R OWNER/REPO] [--previous-tag TAG] dump <tag> [--issue-repo OWNER/REPO] > "$dump"
+<cli> [-R OWNER/REPO] [--previous-tag TAG | --since-final] [--link closing] dump <tag> [--scope-issue-repo OWNER/REPO] > "$dump"
 ```
 
 - Exit `0`: everything was read.
 - Exit `4`: the dump is complete except for issues or pull requests that could not be read; they are marked
   `_Could not be read: …_`. Carry on, and list them under **Verduidelijking nodig**.
 - Exit `1`: relay the `error: …` line from stderr and stop. The common causes are an unknown tag
-  (`tag_not_found`), and a missing **Contents: write** permission on the repository (`forbidden`), which GitHub's
+  (`tag not found`), and a missing **Contents: write** permission on the repository (`forbidden: …`), which GitHub's
   generate-notes API requires even though it creates nothing; authentication is `gh`'s own (`gh auth login`).
 
 Read the dump file completely before writing anything. If it says `No issues or pull requests to describe.`, tell the
