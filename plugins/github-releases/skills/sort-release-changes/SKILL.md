@@ -2,6 +2,7 @@
 name: sort-release-changes
 description: Sort the changes of a GitHub release into a grouped "What's Changed" list (Features, Bug fixes, Other, Maintenance, Dependencies) and a list of the released issues per group, for the release description and the release ticket. Use when asked to sort, group or organise a release's changes or to list the issues of a release, e.g. "/sort-release-changes v3.8.0", "sort this release", "geef me de issues van deze release", or when a `/releases/tag/<tag>` URL is pasted.
 argument-hint: RELEASE_TAG [--ticket-repo OWNER/REPO] [--issue-repo OWNER/REPO] [-R OWNER/REPO] [--previous-tag TAG]
+disable-model-invocation: true
 ---
 
 # Sort release changes
