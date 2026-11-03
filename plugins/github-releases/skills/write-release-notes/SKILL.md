@@ -2,6 +2,7 @@
 name: write-release-notes
 description: Write Dutch release notes for end users and stakeholders from the issues and pull requests of a GitHub release. Use when asked to write release notes for a release tag, e.g. "/write-release-notes v3.8.0" or "schrijf de release notes voor v3.8.0".
 argument-hint: RELEASE_TAG [--issue-repo OWNER/REPO] [-R OWNER/REPO] [--previous-tag TAG]
+disable-model-invocation: true
 ---
 
 # Write release notes
