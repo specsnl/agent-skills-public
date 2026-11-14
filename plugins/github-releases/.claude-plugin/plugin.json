@@ -1,6 +1,7 @@
 {
     "name": "github-releases",
     "description": "Sort a GitHub release's changes into a grouped \"What's Changed\" list and an issue list, and write Dutch release notes and changelogs from them",
+    "version": "0.0.6",
     "author": {
         "name": "Specsnl Team",
         "email": "info@specs.nl",
@@ -8,5 +9,13 @@
     },
     "repository": "specsnl/agent-skills-public",
     "license": "MIT",
-    "keywords": ["releases", "changelog", "release-notes", "github", "gh-release-changes", "specs", "plugin"]
+    "keywords": [
+        "releases",
+        "changelog",
+        "release-notes",
+        "github",
+        "gh-release-changes",
+        "specs",
+        "plugin"
+    ]
 }

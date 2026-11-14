@@ -39,6 +39,14 @@ Each plugin declares its `description` in two places: its own
 `marketplace.json`, so both must always carry the same text. Whenever you
 change a plugin's description, update it in both files.
 
+## Plugin versions
+
+A plugin's `version` lives only in its `plugins/<name>/.claude-plugin/plugin.json`, never in its
+`.claude-plugin/marketplace.json` entry, so other marketplaces that reference the plugin pick up the same version.
+Claude Code prefers the `plugin.json` value and `claude plugin validate` flags a version set in both places. The
+pre-commit hook and the `Bump plugin version` workflow bump the patch version through `.githooks/bump-versions.sh`
+whenever a plugin changes, so don't bump it by hand unless you want a minor or major release.
+
 ## Formatting tables
 
 After editing any markdown table in this repo, use the
