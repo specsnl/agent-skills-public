@@ -19,6 +19,22 @@ plugins using:
 |------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------|
 | github-releases@specs-public | Sort a GitHub release's changes into a grouped "What's Changed" list and an issue list, and write Dutch release notes and changelogs from them |
 
+## Reference these plugins from another marketplace
+
+Each plugin carries its own `version` in `plugins/<plugin>/.claude-plugin/plugin.json`, so another marketplace can
+list a plugin from this repository without tracking its version. Leave `version` out of the entry:
+
+```json
+{
+    "name": "github-releases",
+    "source": {
+        "source": "git-subdir",
+        "url": "specsnl/agent-skills-public",
+        "path": "plugins/github-releases"
+    }
+}
+```
+
 ## Tasks
 
 Check out the complete list using `task --list`.
