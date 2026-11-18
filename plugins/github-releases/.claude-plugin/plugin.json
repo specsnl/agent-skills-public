@@ -1,7 +1,7 @@
 {
     "name": "github-releases",
     "description": "Sort a GitHub release's changes into a grouped \"What's Changed\" list and an issue list, and write Dutch release notes and changelogs from them",
-    "version": "0.0.6",
+    "version": "0.0.8",
     "author": {
         "name": "Specsnl Team",
         "email": "info@specs.nl",

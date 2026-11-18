@@ -22,28 +22,53 @@ Copilot: `copilot plugin install github-releases@specs-public`
   gh extension install specsnl/gh-release-changes
   ```
 
-  Or with Homebrew, as a standalone `gh-release-changes` binary: `brew install specsnl/tap/gh-release-changes`.
-  To try a release candidate, install `specsnl/tap/gh-release-changes@rc` instead. The skills accept either and
-  prefer the Homebrew binary when both are installed, so a release candidate takes precedence over the stable gh
-  extension. They print these install instructions when neither is found.
+  Use the Homebrew binary only to run `gh-release-changes` on its own, outside `gh`
+  (`brew install specsnl/tap/gh-release-changes`), or to test a release candidate
+  (`brew install specsnl/tap/gh-release-changes@rc`). The skills accept either and prefer the Homebrew binary when
+  both are installed, so a release candidate takes precedence over the stable gh extension.
+
+  Run [`setup-gh-release-changes`](#setup-gh-release-changes) to install or upgrade the CLI. The other skills
+  refer to it when the CLI is missing or older than they need, and remind you when a newer release is out.
 - **Contents: write** permission on the repository: GitHub's generate-notes API requires it, even though nothing
   is created.
 
-Run the skills from **within the project** of the release, or pass `-R OWNER/REPO`. Always give the tag (or the
-release URL): the CLI only offers a tag picker in an interactive terminal.
+Run the skills from **within the project** of the release, or pass `-R OWNER/REPO`.
+
+## Naming the release
+
+Call a skill with its slash command, or ask for what you need in plain language: Claude and Copilot start the
+matching skill themselves. Name the release by its tag, its release URL, or its role:
+
+| Request                                                                  | Release                                                                      |
+|--------------------------------------------------------------------------|------------------------------------------------------------------------------|
+| A tag (`v3.8.0`) or a `/releases/tag/<tag>` URL                          | That tag                                                                     |
+| "the latest release", "the last release"                                 | GitHub's latest release, pre-releases left out                               |
+| "the latest candidate", "the newest RC"                                  | The newest pre-release, with `--since-final`                                 |
+| "the current release", "the upcoming release"                            | The newest release, with `--since-final` when it is a pre-release            |
+| "the final release notes", "the whole release", the candidate to promote | The final tag when it exists, else the newest candidate with `--since-final` |
+
+"The latest candidate" only counts when it is newer than the latest release: once `v0.3.1` is out, `v0.3.0-rc.1` is
+no open candidate, and the skill says so and asks. Every run states the resolved tag and the tag it is compared
+with (`v3.8.0-rc.3, compared with v3.7.1`), so a wrong guess shows at once. The skills ask for a tag only when the
+request names no release, or when the resolution is ambiguous. They never create, edit or publish a GitHub
+release: "prepare the release of the latest candidate" gives the texts for it.
 
 ## Skills
 
-| Skill                  | Claude                  | Copilot                                 | Purpose                               |
-|------------------------|-------------------------|-----------------------------------------|---------------------------------------|
-| `write-release-notes`  | `/write-release-notes`  | `/github-releases:write-release-notes`  | Dutch release notes for end users     |
-| `write-changelog`      | `/write-changelog`      | `/github-releases:write-changelog`      | Dutch changelog                       |
-| `sort-release-changes` | `/sort-release-changes` | `/github-releases:sort-release-changes` | Grouped "What's Changed" + issue list |
+| Skill                      | Claude                      | Copilot                                     | Purpose                               |
+|----------------------------|-----------------------------|---------------------------------------------|---------------------------------------|
+| `write-release-notes`      | `/write-release-notes`      | `/github-releases:write-release-notes`      | Dutch release notes for end users     |
+| `write-changelog`          | `/write-changelog`          | `/github-releases:write-changelog`          | Dutch changelog                       |
+| `sort-release-changes`     | `/sort-release-changes`     | `/github-releases:sort-release-changes`     | Grouped "What's Changed" + issue list |
+| `setup-gh-release-changes` | `/setup-gh-release-changes` | `/github-releases:setup-gh-release-changes` | Install or upgrade the CLI            |
 
 ### write-release-notes
 
 Claude: `/write-release-notes RELEASE_TAG`  
 Copilot: `/github-releases:write-release-notes RELEASE_TAG`
+
+Or ask: "write the final release notes for the current release", "what's new for customers in v3.8.0",
+"schrijf de release notes voor de huidige release".
 
 Runs `gh release-changes dump RELEASE_TAG` and adds Dutch release notes for the release to `releasenotes.md` in
 the project root, above the previous release. Items whose user impact is unclear, or that are not (fully)
@@ -55,6 +80,9 @@ released, are not added; they are listed in the chat under **Verduidelijking nod
 Claude: `/write-changelog RELEASE_TAG`  
 Copilot: `/github-releases:write-changelog RELEASE_TAG`
 
+Or ask: "update the changelog for the latest candidate", "add v3.8.0 to changelog.md", "maak de changelog voor
+de laatste release".
+
 Runs `gh release-changes dump RELEASE_TAG` and adds a Dutch changelog for the release to `changelog.md` in the
 project root, grouped by product area, Backend and Fixes. Unclear or not (fully) released items are listed in the
 chat under **Verduidelijking nodig**. The writing rules are in `skills/write-changelog/changelog-instructions.md`.
@@ -65,14 +93,17 @@ and ask you to confirm them. The issue dump is written to a temporary file outsi
 afterwards, so the usernames and internal discussion in it never end up in the repository. Pass
 `--scope-issue-repo OWNER/REPO` when the issue numbers in the PR titles point at another repository.
 
-All skills also take `--since-final`, to compare a release candidate with the previous final release so it covers
-the whole release cycle (it excludes `--previous-tag`), and `--link closing`, to also take the issues a pull
+The release skills also take `--since-final`, to compare a release candidate with the previous final release so it
+covers the whole release cycle (it excludes `--previous-tag`), and `--link closing`, to also take the issues a pull
 request closes on GitHub rather than only the issue numbers in its title.
 
 ### sort-release-changes
 
 Claude: `/sort-release-changes RELEASE_TAG [--relative-to OWNER/REPO]`  
 Copilot: `/github-releases:sort-release-changes RELEASE_TAG [--relative-to OWNER/REPO]`
+
+Or ask: "create a sorted list of changes for the latest release", "prepare the release of the latest candidate",
+"make a QA checklist for the release ticket", "welke issues zitten in de laatste RC".
 
 Runs `gh release-changes sort` and `gh release-changes issues`, and shows both outputs unchanged in separate code
 blocks:
@@ -87,3 +118,14 @@ Pass `--relative-to OWNER/REPO` when the release ticket lives in another reposit
 - `--unlinked`: also list the pull requests without an issue (Dependabot bumps excepted).
 - `--tasks`: write every line as a task (`- [ ] #N`), for a release ticket QA ticks the issues off in.
 - `--titles`: follow every issue with its title, for places that do not expand references, such as Zammad or mail.
+
+### setup-gh-release-changes
+
+Claude: `/setup-gh-release-changes`  
+Copilot: `/github-releases:setup-gh-release-changes`
+
+Checks whether `gh` and `gh-release-changes` are installed, how (gh extension, Homebrew stable or release
+candidate), and which version, and compares that with the latest release. It then shows the one command that
+fits: the gh extension install when the CLI is missing, or the upgrade command for how it was installed. It flags
+a release candidate whose final release is already out, and a Homebrew binary that hides a newer gh extension.
+The skill only suggests commands; it never installs or upgrades anything itself.
