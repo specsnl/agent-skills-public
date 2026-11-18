@@ -1,13 +1,12 @@
 ---
 name: write-release-notes
-description: Write Dutch release notes for end users and stakeholders from the issues and pull requests of a GitHub release. Use when asked to write release notes for a release tag, e.g. "/write-release-notes v3.8.0" or "schrijf de release notes voor v3.8.0".
+description: Write Dutch release notes in prose for end users and stakeholders from the issues and pull requests of a GitHub release, and add them to releasenotes.md. Use when asked for release notes or for what is new for customers, e.g. "release notes for the latest release", "write the final release notes for the current release", "what's new for customers", "/write-release-notes v3.8.0", "schrijf de release notes voor de huidige release", "wat is er nieuw in deze versie". The release can be named by tag, release URL or role (latest release, latest candidate, current release). Release notes mean this skill, not the "What's Changed" list of the release description (sort-release-changes); for a short changelog use write-changelog.
 argument-hint: RELEASE_TAG [--scope-issue-repo OWNER/REPO] [-R OWNER/REPO] [--previous-tag TAG | --since-final] [--link closing]
-disable-model-invocation: true
 ---
 
 # Write release notes
 
-Write Dutch release notes for release `$ARGUMENTS` from the issue dump of the
+Write Dutch release notes for the release asked for (`$ARGUMENTS`) from the issue dump of the
 [`gh-release-changes`](https://github.com/specsnl/gh-release-changes) CLI.
 
 ## 1. Find the CLI
@@ -30,16 +29,32 @@ the version checks when it is not a semantic version (a local build).
 ## 2. Work out the arguments
 
 - **Tag** (required): always pass it explicitly; without a tag the CLI wants an interactive terminal and fails.
-  If `$ARGUMENTS` holds a release URL (`https://<host>/<owner>/<repo>/releases/tag/<tag>`), use its tag and pass
-  `-R <owner>/<repo>` (`-R <host>/<owner>/<repo>` when the host is not `github.com`). If no tag is given, ask
-  for it; `gh release list --limit 5` shows the latest releases to suggest.
+  Resolve it from the request (`$ARGUMENTS`, or the user's words), and pass `-R` to the `gh release` commands below
+  when the repository is given:
+  - **A tag or a release URL** (`https://<host>/<owner>/<repo>/releases/tag/<tag>`): use that tag. For a URL, pass
+    `-R <owner>/<repo>` (`-R <host>/<owner>/<repo>` when the host is not `github.com`).
+  - **"The latest release", "the last release"**: GitHub's latest release, which leaves out pre-releases:
+    `gh release view --json tagName -q .tagName`.
+  - **"The latest candidate", "the newest RC"**: the newest pre-release, with `--since-final`:
+    `gh release list --exclude-drafts --json tagName,isPrerelease -q '[.[] | select(.isPrerelease)][0].tagName'`.
+    It only counts when it is newer than the latest release (`v0.3.0-rc.1` is not, once `v0.3.1` is out): its
+    final release is then already out, so there is no open candidate. Say so and ask.
+  - **"The current release", "the release we're working on", "the upcoming release"**: the newest release,
+    pre-releases included, with `--since-final` when it is a pre-release:
+    `gh release list --exclude-drafts --limit 1 --json tagName -q '.[0].tagName'`.
+  - **"The final" or "the whole release", or the candidate about to be promoted**: the final tag of that version
+    when it exists, otherwise the newest candidate of that version, with `--since-final`.
+
+  Ask only when the request names no release at all, or when the resolution is ambiguous, and suggest the tags
+  from `gh release list --limit 5`. A request to create the release of a candidate means preparing its texts:
+  `sort-release-changes` gives the release description. Never create, edit or publish a GitHub release.
 - **Repository**: the GitHub repository of the current directory, unless `-R` is given.
 - **`--scope-issue-repo OWNER/REPO`**: pass it when the issue numbers in the PR titles point at another repository.
 - **`--previous-tag TAG`**: pass it only when the user asks to compare with a specific tag.
 - **`--since-final`**: compare with the newest final release older than the tag instead of GitHub's choice, so
   a later release candidate (`v3.8.0-rc.3`) covers the whole release cycle rather than only what changed since
-  the previous candidate. Pass it when the user asks for it or for the whole release. It excludes
-  `--previous-tag`: never pass both.
+  the previous candidate. Pass it when the user asks for it or for the whole release, or when the tag was
+  resolved to a candidate as above. It excludes `--previous-tag`: never pass both.
 - **`--link closing`**: also take the issues a pull request closes on GitHub (a closing keyword such as
   `Closes #13`, or a link in its Development sidebar), not only the digit scopes of its title. Pass it when the
   user asks for it, or when the pull requests reference their issues in the description rather than the title.
@@ -61,8 +76,10 @@ dump="$(mktemp -t release-dump.XXXXXX)"
   (`tag not found`), and a missing **Contents: write** permission on the repository (`forbidden: …`), which GitHub's
   generate-notes API requires even though it creates nothing; authentication is `gh`'s own (`gh auth login`).
 
-Read the dump file completely before writing anything. If it says `No issues or pull requests to describe.`, tell the
-user the release has nothing to write about and stop.
+Tell the user the resolved tag and the tag it is compared with, from the `Compared with:` line at the top of the
+dump (`v3.8.0-rc.3, compared with v3.7.1`), so a wrong guess is visible at once. Read the dump file completely
+before writing anything. If it says `No issues or pull requests to describe.`, tell the user the release has
+nothing to write about and stop.
 
 ## 4. Write
 
