@@ -14,13 +14,18 @@ Print the grouped "What's Changed" list and the issue list of release `$ARGUMENT
 
 Run `gh-release-changes version` (the Homebrew binary) first, so a release candidate installed from
 `specsnl/tap/gh-release-changes@rc` wins. If that fails, run `gh release-changes version` (the gh extension). Use
-the first one that works as `<cli>` below. If neither works, stop and tell the user to install it:
+the first one that works as `<cli>` below. It prints `gh-release-changes version <version>`; read it as
+`v<version>`, and compare versions with the semantic versioning rules (`v0.3.0-rc.1` < `v0.3.0` < `v0.3.1`). Skip
+the version checks when it is not a semantic version (a local build).
 
-```sh
-gh extension install specsnl/gh-release-changes
-# or, with Homebrew:
-brew install specsnl/tap/gh-release-changes
-```
+- **Missing or too old**: when neither works, or the version is older than **v0.3.0**, the minimum this skill
+  needs, stop. Refer the user to the `setup-gh-release-changes` skill of this plugin (Claude:
+  `/setup-gh-release-changes`, Copilot: `/github-releases:setup-gh-release-changes`), which shows how to install
+  or upgrade the CLI.
+- **Newer release available**: when
+  `gh release view -R specsnl/gh-release-changes --json tagName -q .tagName` reports a newer version, mention it
+  and refer the user to `setup-gh-release-changes` to upgrade, then continue with the task. When the lookup fails
+  (offline, rate limit), skip it silently.
 
 ## 2. Work out the arguments
 
