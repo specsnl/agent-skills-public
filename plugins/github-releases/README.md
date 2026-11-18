@@ -1,12 +1,12 @@
 # GitHub releases plugin
 
 Skills that turn the changes of a GitHub release into texts for different audiences: a grouped "What's Changed"
-list and an issue list for developers and the release ticket, and Dutch release notes and a changelog for end
-users and stakeholders.
+list and an issue list for developers and the release ticket, the release ticket itself, and Dutch release notes
+and a changelog for end users and stakeholders.
 
 All skills are backed by the [`gh-release-changes`](https://github.com/specsnl/gh-release-changes) CLI, which
 reads GitHub's generated notes for the release. The plugin ships no scripts and handles no tokens: authentication
-is `gh`'s own.
+is `gh`'s own. Only `create-release-ticket` writes to GitHub, and only after you confirm its dry run.
 
 ## Installation
 
@@ -31,6 +31,9 @@ Copilot: `copilot plugin install github-releases@specs-public`
   refer to it when the CLI is missing or older than they need, and remind you when a newer release is out.
 - **Contents: write** permission on the repository: GitHub's generate-notes API requires it, even though nothing
   is created.
+- For `create-release-ticket` only: a `gh-release-changes` version with the `ticket` command
+  ([specsnl/gh-release-changes#1](https://github.com/specsnl/gh-release-changes/issues/1)), and **Issues: write**
+  permission on the repository the ticket is created in.
 
 Run the skills from **within the project** of the release, or pass `-R OWNER/REPO`.
 
@@ -60,6 +63,7 @@ release: "prepare the release of the latest candidate" gives the texts for it.
 | `write-release-notes`      | `/write-release-notes`      | `/github-releases:write-release-notes`      | Dutch release notes for end users     |
 | `write-changelog`          | `/write-changelog`          | `/github-releases:write-changelog`          | Dutch changelog                       |
 | `sort-release-changes`     | `/sort-release-changes`     | `/github-releases:sort-release-changes`     | Grouped "What's Changed" + issue list |
+| `create-release-ticket`    | `/create-release-ticket`    | `/github-releases:create-release-ticket`    | Create or update the release ticket   |
 | `setup-gh-release-changes` | `/setup-gh-release-changes` | `/github-releases:setup-gh-release-changes` | Install or upgrade the CLI            |
 
 ### write-release-notes
@@ -118,6 +122,31 @@ Pass `--relative-to OWNER/REPO` when the release ticket lives in another reposit
 - `--unlinked`: also list the pull requests without an issue (Dependabot bumps excepted).
 - `--tasks`: write every line as a task (`- [ ] #N`), for a release ticket QA ticks the issues off in.
 - `--titles`: follow every issue with its title, for places that do not expand references, such as Zammad or mail.
+
+### create-release-ticket
+
+Claude: `/create-release-ticket RELEASE_TAG [--create-in OWNER/REPO] [--var KEY=VALUE]...` or
+`/create-release-ticket init`  
+Copilot: `/github-releases:create-release-ticket RELEASE_TAG [--create-in OWNER/REPO] [--var KEY=VALUE]...` or
+`/github-releases:create-release-ticket init`
+
+Or ask: "create the release ticket for the latest candidate", "update the release ticket for v3.8.0-rc.2", "set up
+a release ticket template", "maak het release ticket voor de laatste RC".
+
+Runs `gh release-changes ticket`, which renders the release ticket from the project's template and creates the
+issue, or updates the existing one. The template is `.github/release-changes/ticket.md.tmpl` in the repository
+root or on the default branch, or a built-in default; see `gh release-changes ticket --help` for the template data
+and functions. The skill reads which `--var` values the template needs and asks for the ones the request does not
+give, without making any up.
+
+It always runs a `--dry-run` first and shows the title, the labels, the body, the template used, and whether the
+ticket is created or updated. Only after you confirm does it run the command with `--yes`. A re-run for a later
+candidate rewrites only the part between the `gh-release-changes` markers, so ticked boxes and answers survive.
+The ticket covers the whole release from the first candidate on. Pass `--create-in OWNER/REPO` when the ticket
+lives in another repository than the release; issue references then point there.
+
+"Set up a release ticket template" runs `gh release-changes ticket init`, which writes `ticket.md.tmpl` and a
+`checklist.md.tmpl` part to `.github/release-changes/`. The skill asks before overwriting existing files.
 
 ### setup-gh-release-changes
 
