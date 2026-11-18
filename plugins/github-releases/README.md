@@ -32,8 +32,26 @@ Copilot: `copilot plugin install github-releases@specs-public`
 - **Contents: write** permission on the repository: GitHub's generate-notes API requires it, even though nothing
   is created.
 
-Run the skills from **within the project** of the release, or pass `-R OWNER/REPO`. Always give the tag (or the
-release URL): the CLI only offers a tag picker in an interactive terminal.
+Run the skills from **within the project** of the release, or pass `-R OWNER/REPO`.
+
+## Naming the release
+
+Call a skill with its slash command, or ask for what you need in plain language: Claude and Copilot start the
+matching skill themselves. Name the release by its tag, its release URL, or its role:
+
+| Request                                                                  | Release                                                                      |
+|--------------------------------------------------------------------------|------------------------------------------------------------------------------|
+| A tag (`v3.8.0`) or a `/releases/tag/<tag>` URL                          | That tag                                                                     |
+| "the latest release", "the last release"                                 | GitHub's latest release, pre-releases left out                               |
+| "the latest candidate", "the newest RC"                                  | The newest pre-release, with `--since-final`                                 |
+| "the current release", "the upcoming release"                            | The newest release, with `--since-final` when it is a pre-release            |
+| "the final release notes", "the whole release", the candidate to promote | The final tag when it exists, else the newest candidate with `--since-final` |
+
+"The latest candidate" only counts when it is newer than the latest release: once `v0.3.1` is out, `v0.3.0-rc.1` is
+no open candidate, and the skill says so and asks. Every run states the resolved tag and the tag it is compared
+with (`v3.8.0-rc.3, compared with v3.7.1`), so a wrong guess shows at once. The skills ask for a tag only when the
+request names no release, or when the resolution is ambiguous. They never create, edit or publish a GitHub
+release: "prepare the release of the latest candidate" gives the texts for it.
 
 ## Skills
 
@@ -49,6 +67,9 @@ release URL): the CLI only offers a tag picker in an interactive terminal.
 Claude: `/write-release-notes RELEASE_TAG`  
 Copilot: `/github-releases:write-release-notes RELEASE_TAG`
 
+Or ask: "write the final release notes for the current release", "what's new for customers in v3.8.0",
+"schrijf de release notes voor de huidige release".
+
 Runs `gh release-changes dump RELEASE_TAG` and adds Dutch release notes for the release to `releasenotes.md` in
 the project root, above the previous release. Items whose user impact is unclear, or that are not (fully)
 released, are not added; they are listed in the chat under **Verduidelijking nodig**. The writing rules are in
@@ -58,6 +79,9 @@ released, are not added; they are listed in the chat under **Verduidelijking nod
 
 Claude: `/write-changelog RELEASE_TAG`  
 Copilot: `/github-releases:write-changelog RELEASE_TAG`
+
+Or ask: "update the changelog for the latest candidate", "add v3.8.0 to changelog.md", "maak de changelog voor
+de laatste release".
 
 Runs `gh release-changes dump RELEASE_TAG` and adds a Dutch changelog for the release to `changelog.md` in the
 project root, grouped by product area, Backend and Fixes. Unclear or not (fully) released items are listed in the
@@ -77,6 +101,9 @@ request closes on GitHub rather than only the issue numbers in its title.
 
 Claude: `/sort-release-changes RELEASE_TAG [--relative-to OWNER/REPO]`  
 Copilot: `/github-releases:sort-release-changes RELEASE_TAG [--relative-to OWNER/REPO]`
+
+Or ask: "create a sorted list of changes for the latest release", "prepare the release of the latest candidate",
+"make a QA checklist for the release ticket", "welke issues zitten in de laatste RC".
 
 Runs `gh release-changes sort` and `gh release-changes issues`, and shows both outputs unchanged in separate code
 blocks:
