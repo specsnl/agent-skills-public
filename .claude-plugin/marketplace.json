@@ -12,6 +12,11 @@
             "name": "github-releases",
             "source": "./plugins/github-releases",
             "description": "Sort a GitHub release's changes into a grouped \"What's Changed\" list and an issue list, create or update the release ticket, and write Dutch release notes and changelogs from them"
+        },
+        {
+            "name": "product-management",
+            "source": "./plugins/product-management",
+            "description": "Create a Product Definition from your product documents and validate proposed features against it"
         }
     ]
 }

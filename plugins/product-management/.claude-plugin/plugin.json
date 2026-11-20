@@ -1,0 +1,21 @@
+{
+    "name": "product-management",
+    "description": "Create a Product Definition from your product documents and validate proposed features against it",
+    "version": "0.0.1",
+    "author": {
+        "name": "Specsnl Team",
+        "email": "info@specs.nl",
+        "url": "https://github.com/specsnl"
+    },
+    "repository": "specsnl/agent-skills-public",
+    "license": "MIT",
+    "keywords": [
+        "product-management",
+        "product-definition",
+        "product-vision",
+        "feature-validation",
+        "gentlii",
+        "specs",
+        "plugin"
+    ]
+}
