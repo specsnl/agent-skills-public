@@ -13,7 +13,7 @@ Be friendly and brief. Use the user's language. Explain what you are doing in on
 
 ## 1. Start or update
 
-- If one or more `*-product-definition.md` files exist, ask whether the user wants to update one of them (which one) or create a new one. When updating, read the source folder from its frontmatter and confirm the folder is still correct.
+- If one or more `*-product-definition.md` files exist, ask whether the user wants to update one of them (which one) or create a new one. When updating, use the folder from `$ARGUMENTS` if given, otherwise the source folder from its frontmatter, and confirm the folder is still correct.
 - For a new definition, use the folder from the arguments: `$ARGUMENTS`. If it is empty, ask the user which folder contains their product documents (e.g. PDFs, Word, PowerPoint, Markdown).
 
 If the folder does not exist or contains no readable files, say so and ask again.
@@ -46,13 +46,13 @@ For each subject that is `Not found` or Low confidence, and for each contradicti
 
 - Ask one question at a time and wait for the answer before asking the next. Never list multiple questions.
 - Make clear the user may skip a question or answer "I don't know".
-- Before the first question, ask the user's name.
+- Before the first question, confirm the user's name: suggest the one from `git config user.name` when it is set, otherwise ask for it.
 - Use the user's answers as evidence: `**Evidence:** Input from <name> (<YYYY-MM-DD>)`.
 - Never fill a gap yourself; skipped subjects stay `Not found`.
 
 ## 5. Write the Product Definition
 
-Write `<product-name>-product-definition.md` in the current working directory (product name in lowercase, spaces replaced by hyphens, e.g. `gentlii-product-definition.md`), following the output format of the instructions, starting with this frontmatter:
+Write `<product-name>-product-definition.md` in the current working directory (product name in lowercase, spaces replaced by hyphens, e.g. `acme-product-definition.md`), following the output format of the instructions, starting with this frontmatter:
 
 ```markdown
 ---
@@ -63,6 +63,6 @@ updated: <today's date, YYYY-MM-DD>
 # Product Definition: <product name>
 ```
 
-When updating, show the user what changed compared to the previous version before overwriting it.
+When updating, show the user what changed compared to the previous version and wait for their confirmation before overwriting it.
 
 End with one line: where the file is, the Completeness and Strength, and that they can run `/product-definition` again whenever their documents change.
