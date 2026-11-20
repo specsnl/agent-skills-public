@@ -79,9 +79,10 @@ Run it from a folder with a GitHub repository. Derives an Observed Product Defin
 stories completed in that repository over the last `MONTHS` months, and compares it with the
 `*-product-definition.md` in the current working directory. It needs the `gh` CLI. It:
 
-- Fetches the completed issues of the period into `issues-<start>-to-<end>.md`.
+- Fetches the completed issues of the period into `issues-<start>-to-<end>.md` in the current working directory.
 - Derives target groups, needs, features, business goals, and differentiators from the delivered work.
 - Compares them with the Product Definition and reports where the product drifts from it.
+- Applies the suggestions you choose to the Product Definition, after showing the change.
 - Without a Product Definition, only shows the Observed Product Definition.
 
 The comparison rules are in `skills/drift-detection/drift-detection-compare-instructions.md`.
