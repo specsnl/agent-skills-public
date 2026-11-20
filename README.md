@@ -18,7 +18,7 @@ plugins using:
 | Plugin Name                     | Description                                                                                                                                                                         |
 |---------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | github-releases@specs-public    | Sort a GitHub release's changes into a grouped "What's Changed" list and an issue list, create or update the release ticket, and write Dutch release notes and changelogs from them |
-| product-management@specs-public | Create a Product Definition from your product documents and validate proposed features against it                                                                                   |
+| product-management@specs-public | Create a Product Definition from your product documents, validate proposed features against it, and detect drift between completed work and the definition                          |
 
 ## Reference these plugins from another marketplace
 
