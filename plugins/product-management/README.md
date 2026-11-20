@@ -12,6 +12,7 @@ establishes and maintains the Product Vision. Feature Validation uses that visio
 ## Installation
 
 Claude: `claude plugin install product-management@specs-public`
+
 Copilot: `copilot plugin install product-management@specs-public`
 
 ## Core principles
@@ -51,12 +52,13 @@ The writing rules are in `skills/product-definition/product-definition-instructi
 ### feature-validation
 
 Claude: `/feature-validation [FEATURE]`
+
 Copilot: `/product-management:feature-validation [FEATURE]`
 
 Validates a proposed feature, given as a description or a path to a file, against the `*-product-definition.md`
 in the current working directory. Run `/product-definition` first when there is none. It:
 
-- Assesses alignment with the Product Vision.
+- Assesses alignment with the Product Defintion.
 - Identifies the user problem the feature aims to solve.
 - Evaluates expected user and business value.
 - Identifies assumptions, risks, and trade-offs.
