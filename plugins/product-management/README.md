@@ -36,6 +36,7 @@ Both skills only start from their slash command; Claude and Copilot do not start
 ### product-definition
 
 Claude: `/product-definition [FOLDER]`
+
 Copilot: `/product-management:product-definition [FOLDER]`
 
 Creates or updates `<product-name>-product-definition.md` in the current working directory from the product
@@ -58,7 +59,7 @@ Copilot: `/product-management:feature-validation [FEATURE]`
 Validates a proposed feature, given as a description or a path to a file, against the `*-product-definition.md`
 in the current working directory. Run `/product-definition` first when there is none. It:
 
-- Assesses alignment with the Product Defintion.
+- Assesses alignment with the Product Definition.
 - Identifies the user problem the feature aims to solve.
 - Evaluates expected user and business value.
 - Identifies assumptions, risks, and trade-offs.
