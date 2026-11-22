@@ -1,7 +1,7 @@
 {
     "name": "product-management",
     "description": "Create a Product Definition from your product documents, validate proposed features against it, and detect drift between completed work and the definition",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "author": {
         "name": "Specsnl Team",
         "email": "info@specs.nl",
