@@ -6,6 +6,7 @@ evidence.
 
 The plugin works with a minimal set of Markdown files in the current working directory. Product Definition
 establishes and maintains the Product Vision. Feature Validation uses that vision to assess proposed features.
+Drift Detection checks whether the completed work still matches it.
 
 **Define the product. Validate the features. Build what matters.**
 
@@ -26,16 +27,18 @@ Copilot: `copilot plugin install product-management@specs-public`
 
 ## Skills
 
-| Skill                | Claude                | Copilot                                  | Purpose                                   |
-|----------------------|-----------------------|------------------------------------------|-------------------------------------------|
-| `product-definition` | `/product-definition` | `/product-management:product-definition` | Create or update a Product Definition     |
-| `feature-validation` | `/feature-validation` | `/product-management:feature-validation` | Validate a feature against the definition |
+| Skill                | Claude                | Copilot                                  | Purpose                                                |
+|----------------------|-----------------------|------------------------------------------|--------------------------------------------------------|
+| `product-definition` | `/product-definition` | `/product-management:product-definition` | Create or update a Product Definition                  |
+| `feature-validation` | `/feature-validation` | `/product-management:feature-validation` | Validate a feature against the definition              |
+| `drift-detection`    | `/drift-detection`    | `/product-management:drift-detection`    | Detect drift between completed work and the definition |
 
-Both skills only start from their slash command; Claude and Copilot do not start them on their own.
+All skills only start from their slash command; Claude and Copilot do not start them on their own.
 
 ### product-definition
 
 Claude: `/product-definition [FOLDER]`
+
 Copilot: `/product-management:product-definition [FOLDER]`
 
 Creates or updates `<product-name>-product-definition.md` in the current working directory from the product
@@ -58,10 +61,28 @@ Copilot: `/product-management:feature-validation [FEATURE]`
 Validates a proposed feature, given as a description or a path to a file, against the `*-product-definition.md`
 in the current working directory. Run `/product-definition` first when there is none. It:
 
-- Assesses alignment with the Product Defintion.
+- Assesses alignment with the Product Definition.
 - Identifies the user problem the feature aims to solve.
 - Evaluates expected user and business value.
 - Identifies assumptions, risks, and trade-offs.
 - Recommends Approve, Revise, or Reject, with concrete suggestions to align the feature.
 
 The validation rules are in `skills/feature-validation/feature-validation-instructions.md`.
+
+### drift-detection
+
+Claude: `/drift-detection [MONTHS]`
+
+Copilot: `/product-management:drift-detection [MONTHS]`
+
+Run it from a folder with a GitHub repository. Derives an Observed Product Definition from the features and user
+stories completed in that repository over the last `MONTHS` months, and compares it with the
+`*-product-definition.md` in the current working directory. It needs the `gh` CLI. It:
+
+- Fetches the completed issues of the period into `issues-<start>-to-<end>.md` in the current working directory.
+- Derives target groups, needs, features, business goals, and differentiators from the delivered work.
+- Compares them with the Product Definition and reports where the product drifts from it.
+- Applies the suggestions you choose to the Product Definition, after showing the change.
+- Without a Product Definition, only shows the Observed Product Definition.
+
+The comparison rules are in `skills/drift-detection/drift-detection-compare-instructions.md`.

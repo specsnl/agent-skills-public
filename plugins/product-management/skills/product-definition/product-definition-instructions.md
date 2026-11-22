@@ -55,13 +55,15 @@ Report only contradictions, inconsistencies, or tensions that are explicit or st
 After the subjects, add this block:
 
 ```markdown
+## Evaluation
+
 ### Completeness
 <Complete | Partial | Incomplete>
 
 ### Strength
 <High | Medium | Low>
 
-## Suggestion
+### Suggestions
 - ...
 ```
 
@@ -77,4 +79,4 @@ After the subjects, add this block:
 - Medium: partially defined, some ambiguity
 - Low: vague, generic, not actionable
 
-**Suggestion**: at most 3 bullets, kept separate from extracted content and without new facts. Focus on missing elements, weak or unclear needs, features that don't clearly solve a need, lack of differentiation, and misalignment between elements. If no useful suggestion can be made, write `Not found`.
+**Suggestions**: at most 3 bullets, kept separate from extracted content and without new facts. Focus on missing elements, weak or unclear needs, features that don't clearly solve a need, lack of differentiation, and misalignment between elements. If no useful suggestion can be made, write `Not found`.
